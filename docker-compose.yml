@@ -1,0 +1,51 @@
+version: 3
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: ./Dockerfile
+    environment:
+      ENV: "development"
+      DATABASE_HOST: "postgres"
+      DATABASE_USER: "beatshub"
+      DATABASE_NAME: "beatshub"
+      DATABASE_PASSWORD: "password"
+      GMAIL_PASSWORD: "${GMAIL_PASSWORD}"
+      BASE_URL: "http://localhost:3000"
+      BUCKET_ACCESS_KEY_ID: "minio"
+      BUCKET_ACCESS_SECRET: "minio123"
+      BUCKET_PRIVATE_BASE_URL: "http://minio:9000"
+      BUCKET_PUBLIC_BASE_URL: "http://localhost:9000"
+      BEATSHUB_SECRET: "secret"
+    ports:
+      - 8080:8080
+    volumes:
+      - ./api:/go/src
+  postgres:
+    image: postgres:14.5-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: "beatshub"
+      POSTGRES_USER: "beatshub"
+      POSTGRES_PASSWORD: "password"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+  minio:
+    image: minio/minio:RELEASE.2021-11-24T23-19-33Z
+    ports:
+      - 9000:9000
+      - 9001:9001
+    environment:
+      - MINIO_ACCESS_KEY=minio
+      - MINIO_SECRET_KEY=minio123
+    entrypoint: sh
+    command: -c "
+      mkdir -p /data/.minio.sys/buckets;
+      cp -r /policies/* /data/.minio.sys/;
+      minio server /data --console-address :9001;
+      "
+    volumes:
+      - ./data/minio/data:/data
+      - ./data/minio/export:/export
+      - ./data/minio/policies:/policies
