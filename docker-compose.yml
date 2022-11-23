@@ -1,4 +1,4 @@
-version: 3
+version: "3"
 services:
   api:
     build:
@@ -10,6 +10,7 @@ services:
       DATABASE_USER: "beatshub"
       DATABASE_NAME: "beatshub"
       DATABASE_PASSWORD: "password"
+      GMAIL_EMAIL: "${GMAIL_EMAIL}"
       GMAIL_PASSWORD: "${GMAIL_PASSWORD}"
       BASE_URL: "http://localhost:3000"
       BUCKET_ACCESS_KEY_ID: "minio"
