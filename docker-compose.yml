@@ -7,8 +7,8 @@ services:
     environment:
       ENV: "development"
       DATABASE_HOST: "postgres"
-      DATABASE_USER: "beathub"
-      DATABASE_NAME: "beathub"
+      DATABASE_USER: "develop"
+      DATABASE_NAME: "develop"
       DATABASE_PASSWORD: "password"
       GMAIL_EMAIL: "${GMAIL_EMAIL}"
       GMAIL_PASSWORD: "${GMAIL_PASSWORD}"
@@ -27,8 +27,8 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_DB: "beathub"
-      POSTGRES_USER: "beathub"
+      POSTGRES_DB: "develop"
+      POSTGRES_USER: "develop"
       POSTGRES_PASSWORD: "password"
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
