@@ -4,21 +4,28 @@ import { ApiError } from "../../types/errors"
 
 const useApi = <T, S>(method: 'POST' | 'GET' | 'PUT' | 'DELETE', url: string) => {
   const [result, setResult] = useState<{
-    data?: S,
-    error?: ApiError,
-  }>({})
+    isLoading: boolean;
+    data?: S;
+    error?: ApiError;
+  }>({
+    isLoading: false,
+  })
   const mutate = async (data: T) => {
-    setResult({})
+    setResult({
+      isLoading: true,
+    })
     try{
       const result = await api<T, S>(method, url, {
         ...data
       })
       setResult({
+        isLoading: false,
         data: result
       })
     }catch(e){
       if(e instanceof ApiError){
         setResult({
+          isLoading: false,
           error: e
         })
       }
@@ -26,7 +33,6 @@ const useApi = <T, S>(method: 'POST' | 'GET' | 'PUT' | 'DELETE', url: string) =>
   }
   return {
     ...result,
-    isLoading: !result.data && !result.error,
     mutate,
   }
 }

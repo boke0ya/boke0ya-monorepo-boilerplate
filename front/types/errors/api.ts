@@ -30,4 +30,32 @@ export class ApiError extends Error {
     this.message = props.message
     this.info = props.info
   }
+  getMessage(): string {
+    switch(this.code){
+      case ApiErrorCode.InvalidEmailFormatError:
+        return 'メールアドレスの形式が間違っています'
+      case ApiErrorCode.InvalidPasswordFormatError:
+        return 'パスワードの形式が間違っています'
+      case ApiErrorCode.InvalidScreenNameFormatError:
+        return 'IDの形式が間違っています'
+      case ApiErrorCode.InvalidNameFormatError:
+        return '名前の形式が間違っています'
+      case ApiErrorCode.EmailAlreadyExistsError:
+        return 'メールアドレスが既に登録されています'
+      case ApiErrorCode.UserNotFoundError:
+        return 'ユーザーが見つかりませんでした'
+      case ApiErrorCode.EmailVerificationNotFoundError:
+        return '本人確認が実施されていません'
+      case ApiErrorCode.AuthorizationRequired:
+        return 'ログインが必要です'
+      case ApiErrorCode.WrongPassword:
+        return 'パスワードが間違っています'
+      case ApiErrorCode.PermissionDenied:
+        return '権限がありません'
+      case ApiErrorCode.InvalidAuthozationToken:
+        return '不正なトークンが検出されました'
+      default:
+        return '処理に失敗しました'
+    }
+  }
 }

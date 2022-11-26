@@ -1,0 +1,46 @@
+@import "../theme.scss";
+
+@keyframes loopedRotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.button {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 4px;
+  border: none;
+  font-weight: bold;
+  align-items: center;
+  display: inline-flex;
+  background: $primary-1;
+  gap: 8px;
+  .loading {
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+    border: 2px solid $highlight-1;
+    position: relative;
+    &::before {
+      content: '';
+      display: block;
+      width: 12px;
+      height: 12px;
+      border-radius: 6px;
+      box-sizing: border-box;
+      border-top: 2px solid $text-1;
+      border-left: 2px solid transparent;
+      border-right: 2px solid transparent;
+      border-bottom: 2px solid transparent;
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      animation: loopedRotation 1s ease-in-out infinite;
+      transform-origin: center;
+    }
+  }
+}

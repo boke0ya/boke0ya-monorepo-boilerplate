@@ -1,0 +1,55 @@
+@import "../../theme.scss";
+
+.container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    pointer-events: none;
+    padding: 16px;
+    .overlay {
+        background: $shadow-1;
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+    .main {
+        background: $base-2;
+        position: relative;
+        opacity: 0;
+        max-width: 100%;
+        min-height: 100px;
+        margin-top: 64px;
+        margin-right: auto;
+        margin-left: auto;
+        border-radius: 8px;
+        padding: 16px;
+        z-index: 2;
+        .title {
+            margin-bottom: 16px;
+        }
+        .close{
+        }
+    }
+    &.open {
+        pointer-events: all;
+        .overlay {
+            opacity: 1;
+        }
+        .main {
+            opacity: 1;
+        }
+    }
+}
+
+.footer {
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-between;
+}
