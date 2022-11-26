@@ -6,6 +6,7 @@ services:
       dockerfile: ./Dockerfile
     environment:
       ENV: "development"
+      PORT: "10000"
       DATABASE_HOST: "postgres"
       DATABASE_USER: "develop"
       DATABASE_NAME: "develop"
@@ -19,7 +20,7 @@ services:
       BUCKET_PUBLIC_BASE_URL: "http://localhost:9000"
       BEATSHUB_SECRET: "secret"
     ports:
-      - 8080:8080
+      - 10000:10000
     volumes:
       - ./api:/go/src
   postgres:

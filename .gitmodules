@@ -1,6 +1,0 @@
-[submodule "api"]
-	path = api
-	url = git@github.com:boke0ya/beathub-api.git
-[submodule "front"]
-	path = front
-	url = git@github.com:boke0ya/beathub-front.git
