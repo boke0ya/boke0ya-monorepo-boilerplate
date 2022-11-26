@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/boke0ya/beathub-api/internal/errors"
+	"app/internal/errors"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
 )

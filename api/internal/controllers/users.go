@@ -3,8 +3,8 @@ package controllers
 import (
 	"net/http"
 
-	. "github.com/boke0ya/beathub-api/internal/controllers/converters"
-	. "github.com/boke0ya/beathub-api/internal/entities"
+	. "app/internal/controllers/converters"
+	. "app/internal/entities"
 	"github.com/gin-gonic/gin"
 )
 

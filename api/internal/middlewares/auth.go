@@ -3,8 +3,8 @@ package middlewares
 import (
 	"strings"
 
-	. "github.com/boke0ya/beathub-api/internal/controllers"
-	"github.com/boke0ya/beathub-api/internal/errors"
+	. "app/internal/controllers"
+	"app/internal/errors"
 	"github.com/gin-gonic/gin"
 )
 

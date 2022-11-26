@@ -1,8 +1,8 @@
 package gmail
 
 import (
-	"github.com/boke0ya/beathub-api/internal/adapters"
-	"github.com/boke0ya/beathub-api/internal/errors"
+	"app/internal/adapters"
+	"app/internal/errors"
 	"gopkg.in/gomail.v2"
 )
 

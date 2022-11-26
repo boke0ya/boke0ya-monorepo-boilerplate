@@ -1,10 +1,10 @@
 package usecases
 
 import (
-	. "github.com/boke0ya/beathub-api/internal/adapters"
-	. "github.com/boke0ya/beathub-api/internal/controllers"
-	. "github.com/boke0ya/beathub-api/internal/entities"
-	"github.com/boke0ya/beathub-api/internal/errors"
+	. "app/internal/adapters"
+	. "app/internal/controllers"
+	. "app/internal/entities"
+	"app/internal/errors"
 	"github.com/golang-jwt/jwt/v4"
 )
 

@@ -1,4 +1,4 @@
-module github.com/boke0ya/beathub-api
+module app
 
 go 1.19
 

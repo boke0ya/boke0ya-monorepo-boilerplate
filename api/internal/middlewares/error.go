@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	. "github.com/boke0ya/beathub-api/internal/errors"
+	. "app/internal/errors"
 	"github.com/gin-gonic/gin"
 )
 

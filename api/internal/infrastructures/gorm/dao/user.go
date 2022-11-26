@@ -3,7 +3,7 @@ package dao
 import (
 	"time"
 
-	"github.com/boke0ya/beathub-api/internal/entities"
+	"app/internal/entities"
 )
 
 type User struct {

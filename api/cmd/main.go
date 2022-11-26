@@ -4,14 +4,14 @@ import (
 	"net/http"
 	"os"
 
-	. "github.com/boke0ya/beathub-api/internal/controllers"
-	. "github.com/boke0ya/beathub-api/internal/controllers/converters"
-	. "github.com/boke0ya/beathub-api/internal/infrastructures/gmail"
-	. "github.com/boke0ya/beathub-api/internal/infrastructures/gorm"
-	. "github.com/boke0ya/beathub-api/internal/infrastructures/gorm/repositories"
-	. "github.com/boke0ya/beathub-api/internal/infrastructures/s3"
-	. "github.com/boke0ya/beathub-api/internal/middlewares"
-	. "github.com/boke0ya/beathub-api/internal/usecases"
+	. "app/internal/controllers"
+	. "app/internal/controllers/converters"
+	. "app/internal/infrastructures/gmail"
+	. "app/internal/infrastructures/gorm"
+	. "app/internal/infrastructures/gorm/repositories"
+	. "app/internal/infrastructures/s3"
+	. "app/internal/middlewares"
+	. "app/internal/usecases"
 	"github.com/gin-gonic/gin"
 )
 

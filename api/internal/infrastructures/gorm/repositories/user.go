@@ -1,9 +1,9 @@
 package repositories
 
 import (
-	"github.com/boke0ya/beathub-api/internal/entities"
-	"github.com/boke0ya/beathub-api/internal/errors"
-	"github.com/boke0ya/beathub-api/internal/infrastructures/gorm/dao"
+	"app/internal/entities"
+	"app/internal/errors"
+	"app/internal/infrastructures/gorm/dao"
 	"gorm.io/gorm"
 )
 

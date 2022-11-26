@@ -9,8 +9,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	. "github.com/boke0ya/beathub-api/internal/adapters"
-	"github.com/boke0ya/beathub-api/internal/errors"
+	. "app/internal/adapters"
+	"app/internal/errors"
 )
 
 type S3Adapter struct {

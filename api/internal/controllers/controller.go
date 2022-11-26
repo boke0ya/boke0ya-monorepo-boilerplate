@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	. "github.com/boke0ya/beathub-api/internal/entities"
+	. "app/internal/entities"
 	"github.com/gin-gonic/gin"
 )
 
