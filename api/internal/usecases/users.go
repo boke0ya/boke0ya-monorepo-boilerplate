@@ -78,8 +78,8 @@ func (uu userUsecase) SignupEmailVerification(email string) error {
 	}
 	err = uu.mailAdapter.Send(
 		email,
-		"BeatHub 本人確認",
-		"BeatHubのご登録ありがとうございます。\r\n"+
+		"<サービス名> 本人確認",
+		"<サービス名>のご登録ありがとうございます。\r\n"+
 			"\r\n"+
 			"下記URLより、本登録へお進み下さい\r\n"+
 			uu.baseUrl+"/signup?token="+emailVerification.Token+"\r\n"+
@@ -142,7 +142,7 @@ func (uu userUsecase) UpdateEmailVerification(loginUser LoginUser, email string)
 	uu.emailVerificationRepository.Create(emailVerification)
 	err = uu.mailAdapter.Send(
 		email,
-		"BeatHub 本人確認",
+		"<サービス名> 本人確認",
 		"メールアドレスの変更を受け付けました。\r\n"+
 			"\r\n"+
 			"下記URLより、変更を完了して下さい。\r\n"+
