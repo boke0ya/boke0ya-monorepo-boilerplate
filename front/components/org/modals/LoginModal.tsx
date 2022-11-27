@@ -3,8 +3,9 @@ import useGlobalViewModel from "../../../hooks/viewmodels/useGlobalViewModel";
 import { ApiError } from "../../../types/errors";
 import Button from "../../atm/Button";
 import ErrorMessage from "../../atm/ErrorMessage";
+import FormFooter from "../../mol/FormFooter";
 import TextInput from "../../mol/TextInput";
-import Modal, { ModalFooter } from "./Modal";
+import Modal from "./Modal";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -58,10 +59,10 @@ const LoginModal = ({
           <ErrorMessage>{error.getMessage()}</ErrorMessage>
         ) : (<></>)
       }
-      <ModalFooter>
+      <FormFooter>
         <span />
         <Button isLoading={isLoading} onClick={login}>ログイン</Button>
-      </ModalFooter>
+      </FormFooter>
     </Modal>
   )
 }

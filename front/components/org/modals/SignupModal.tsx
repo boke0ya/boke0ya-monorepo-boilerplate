@@ -3,8 +3,9 @@ import { usePost } from "../../../hooks/api";
 import { SignupEmailVerificationRequest } from "../../../types/api/user";
 import Button from "../../atm/Button";
 import ErrorMessage from "../../atm/ErrorMessage";
+import FormFooter from "../../mol/FormFooter";
 import TextInput from "../../mol/TextInput";
-import Modal, { ModalFooter } from "./Modal"
+import Modal from "./Modal"
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -48,10 +49,10 @@ const SignupModal = ({
                   <ErrorMessage>{signupApi.error.getMessage()}</ErrorMessage>
                 ) : (<></>)
               }
-              <ModalFooter>
+              <FormFooter>
                 <span />
                 <Button disabled={email.length === 0} onClick={signup} isLoading={signupApi.isLoading}>確認メールを送信</Button>
-              </ModalFooter>
+              </FormFooter>
             </>
           )
         }else{
@@ -59,10 +60,10 @@ const SignupModal = ({
             <>
               <h2>確認メールを送信しました！</h2>
               <p>受信ボックスを確認し、メールに記載されたURLから本登録を行って下さい</p>
-              <ModalFooter>
+              <FormFooter>
                 <span />
                 <Button onClick={onClose}>閉じる</Button>
-              </ModalFooter>
+              </FormFooter>
             </>
           )
         }

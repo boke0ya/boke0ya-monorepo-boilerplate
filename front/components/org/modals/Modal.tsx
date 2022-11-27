@@ -32,14 +32,3 @@ const Modal = ({
 
 export default Modal
 
-interface ModalFooterProps {
-  children: React.ReactNode;
-}
-
-export const ModalFooter = ({ children }: ModalFooterProps) => {
-  return (
-    <div className={styles.footer}>
-      {children}
-    </div>
-  )
-}
