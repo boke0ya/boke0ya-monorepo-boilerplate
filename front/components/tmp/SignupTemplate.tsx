@@ -1,6 +1,7 @@
 import useSignupViewModel from "../../hooks/viewmodels/useSignupViewModel"
 import Button from "../atm/Button"
 import ErrorMessage from "../atm/ErrorMessage"
+import FormFooter from "../mol/FormFooter"
 import IconInput from "../mol/IconInput"
 import TextInput from "../mol/TextInput"
 
@@ -43,7 +44,10 @@ const SignupTemplate = ({
           <ErrorMessage>{viewmodel.error.getMessage()}</ErrorMessage>
         ) : (<></>)
       }
-      <Button disabled={!viewmodel.validate()} onClick={() => viewmodel.signup()} isLoading={viewmodel.isLoading}>新規登録</Button>
+      <FormFooter>
+        <span />
+        <Button disabled={!viewmodel.validate()} onClick={() => viewmodel.signup()} isLoading={viewmodel.isLoading}>新規登録</Button>
+      </FormFooter>
     </>
   )
 }
