@@ -1,17 +1,15 @@
 import '../styles/globals.scss'
 import type { AppProps } from 'next/app'
-import { GlobalContext, GlobalReducer } from '../hooks/viewmodels/useGlobalViewModel'
-import { useReducer } from 'react'
+import useGlobalViewModel, { GlobalContext } from '../hooks/viewmodels/useGlobalViewModel'
+import { useEffect } from 'react'
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [state, dispatch] = useReducer(GlobalReducer, {
-    sessionUser: null,
-  })
+  const globalViewModel = useGlobalViewModel()
+  useEffect(() => {
+    globalViewModel.loadSessionUser()
+  }, [])
   return (
-    <GlobalContext.Provider value={{
-      state,
-      dispatch
-    }}>
+    <GlobalContext.Provider value={globalViewModel}>
       <Component {...pageProps} />
     </GlobalContext.Provider>
   )

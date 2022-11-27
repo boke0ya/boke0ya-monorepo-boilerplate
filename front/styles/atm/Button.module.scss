@@ -45,7 +45,6 @@
     }
   }
   &:disabled {
-    background: $highlight-2;
-    color: $light-text-1;
+    opacity: 0.3;
   }
 }

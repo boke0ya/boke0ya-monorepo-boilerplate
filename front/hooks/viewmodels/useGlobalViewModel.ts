@@ -1,5 +1,5 @@
 import { destroyCookie, setCookie } from "nookies";
-import { useContext, createContext } from "react";
+import { createContext, useReducer } from "react";
 import getApi from "../../libs/fetch/get";
 import postApi from "../../libs/fetch/post";
 import { LoginRequest, LoginResponse, User } from "../../types/api/user";
@@ -38,7 +38,9 @@ export const GlobalReducer = (state: GlobalState, action: GlobalAction) => {
 }
 
 const useGlobalViewModel = () => {
-  const globalContext = useContext(GlobalContext)
+  const [state, dispatch] = useReducer(GlobalReducer, {
+    sessionUser: null,
+  })
   const login = async (id: string, password: string) => {
     let email: string
     let screenName: string
@@ -54,12 +56,13 @@ const useGlobalViewModel = () => {
     })
     setCookie(null, 'AUTH_TOKEN', token, {
       maxAge: 14 * 24 * 36000,
+      path: '/'
     })
   }
   const loadSessionUser = async () => {
     try{
-      const sessionUser = await getApi(`/api/session`)
-      globalContext.dispatch({
+      const sessionUser = await getApi<User>(`/api/session`)
+      dispatch({
         type: 'LOAD_SESSION_USER',
         sessionUser,
       })
@@ -67,12 +70,12 @@ const useGlobalViewModel = () => {
   }
   const logout = () => {
     destroyCookie(null, 'AUTH_TOKEN')
-    globalContext.dispatch({
+    dispatch({
       type: "UNLOAD_SESSION_USER",
     })
   }
   return {
-    ...globalContext.state,
+    ...state,
     login,
     logout,
     loadSessionUser,

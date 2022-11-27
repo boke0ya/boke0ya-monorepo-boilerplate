@@ -1,19 +1,22 @@
 import { useRouter } from "next/router"
 import { setCookie } from "nookies"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { usePost } from "../../hooks/api"
 import useS3Upload from "../../hooks/api/useS3"
 import useGlobalViewModel from "../../hooks/viewmodels/useGlobalViewModel"
 import { SignupRequest, SignupResponse } from "../../types/api/user"
+import useIconGenerator from "../useIconGenerateor"
 
 const useSignupViewModel = () => {
   const globalViewModel = useGlobalViewModel()
   const router = useRouter()
   const [icon, setIcon] = useState<File | Blob>(null)
+  const [defaultIconUrl, setDefaultIconUrl] = useState<string>(null)
   const [name, setName] = useState('')
   const [screenName, setScreenName] = useState('')
   const [password, setPassword] = useState('')
 
+  const iconGenerator = useIconGenerator()
   const signupApi = usePost<SignupRequest, SignupResponse>(`/api/signup`)
   const [isLoading, setIsLoading] = useState(false)
   const uploadIconApi = useS3Upload(`/api/users/profile/icon`)
@@ -37,10 +40,11 @@ const useSignupViewModel = () => {
       })
       setCookie(null, 'AUTH_TOKEN', token, {
         maxAge: 14 * 24 * 3600,
+        path: '/'
       })
-      await uploadIconApi.upload(icon)
+      await uploadIconApi.upload(icon ?? iconGenerator.icon)
       await globalViewModel.loadSessionUser()
-
+      router.push('/')
     }catch(_){ }
     setIsLoading(false)
   }
@@ -60,8 +64,20 @@ const useSignupViewModel = () => {
       validatePassword()
   }
 
+  useEffect(() => {
+    if(iconGenerator.icon){
+      setDefaultIconUrl(URL.createObjectURL(iconGenerator.icon))
+    }
+    return () => {
+      if(defaultIconUrl){
+        URL.revokeObjectURL(defaultIconUrl)
+      }
+    }
+  }, [iconGenerator.icon])
+
   return {
     icon, setIcon,
+    defaultIconUrl,
     name, setName,
     screenName, setScreenName,
     password, setPassword,

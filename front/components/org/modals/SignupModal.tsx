@@ -19,10 +19,12 @@ const SignupModal = ({
   const [isSucceed, setIsSucceed] = useState(false)
   const signupApi = usePost<SignupEmailVerificationRequest, null>(`/api/email-verification/signup`)
   const signup = async () => {
-    await signupApi.mutate({
-      email
-    })
-    setIsSucceed(true)
+    try{
+      await signupApi.mutate({
+        email
+      })
+      setIsSucceed(true)
+    }catch(_){}
   }
   const onClose = () => {
     setEmail('')

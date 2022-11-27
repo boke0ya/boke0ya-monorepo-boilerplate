@@ -1,7 +1,7 @@
-import { useState } from "react"
 import useSignupViewModel from "../../hooks/viewmodels/useSignupViewModel"
 import Button from "../atm/Button"
 import ErrorMessage from "../atm/ErrorMessage"
+import IconInput from "../mol/IconInput"
 import TextInput from "../mol/TextInput"
 
 interface SignupTemplateProps {
@@ -13,6 +13,11 @@ const SignupTemplate = ({
 }: SignupTemplateProps) => {
   return (
     <>
+      <IconInput
+        value={viewmodel.icon}
+        defaultUrl={viewmodel.defaultIconUrl}
+        onChange={(file) => viewmodel.setIcon(file)}
+      />
       <TextInput
         label='名前'
         placeholder='紫式部'
