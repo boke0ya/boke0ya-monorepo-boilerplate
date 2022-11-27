@@ -15,6 +15,23 @@ func NewGormEmailVerificationRepository(db *gorm.DB) entities.EmailVerificationR
 	return GormEmailVerificationRepository{db}
 }
 
+func (cr GormEmailVerificationRepository) Begin() entities.EmailVerificationRepository {
+	return GormEmailVerificationRepository{
+		db: cr.db.Begin(),
+	}
+}
+
+func (cr GormEmailVerificationRepository) Commit() error {
+	if err := cr.db.Commit().Error; err != nil {
+		return errors.New(errors.FailedToPersistEmailVerification, err)
+	}
+	return nil
+}
+
+func (cr GormEmailVerificationRepository) Rollback() {
+	cr.db.Rollback()
+}
+
 func (cr GormEmailVerificationRepository) Create(user entities.EmailVerification) (entities.EmailVerification, error) {
 	gormEmailVerification := dao.ConvertFromEmailVerificationEntity(user)
 	if err := cr.db.Create(&gormEmailVerification).Error; err != nil {

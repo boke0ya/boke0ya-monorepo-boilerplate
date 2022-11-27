@@ -13,33 +13,58 @@ interface SignupModalProps {
 
 const SignupModal = ({
   isOpen,
-  onClose,
+  ...props
 }: SignupModalProps) => {
   const [email, setEmail] = useState('')
-  const signupApi = usePost<SignupEmailVerificationRequest, null>(`/api/login`)
+  const [isSucceed, setIsSucceed] = useState(false)
+  const signupApi = usePost<SignupEmailVerificationRequest, null>(`/api/email-verification/signup`)
   const signup = async () => {
-    signupApi.mutate({
+    await signupApi.mutate({
       email
     })
+    setIsSucceed(true)
+  }
+  const onClose = () => {
+    setEmail('')
+    props.onClose()
   }
   return (
     <Modal isOpen={isOpen} onClose={onClose} title='新規登録'>
-      <TextInput
-        type='email'
-        placeholder='メールアドレス'
-        label='メールアドレス'
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      {
-        signupApi.error ? (
-          <ErrorMessage>{signupApi.error.getMessage()}</ErrorMessage>
-        ) : (<></>)
-      }
-      <ModalFooter>
-        <span />
-        <Button onClick={signup} isLoading={signupApi.isLoading}>確認メールを送信</Button>
-      </ModalFooter>
+      {(() => {
+        if(!isSucceed){
+          return (
+            <>
+              <TextInput
+                type='email'
+                placeholder='メールアドレス'
+                label='メールアドレス'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {
+                signupApi.error ? (
+                  <ErrorMessage>{signupApi.error.getMessage()}</ErrorMessage>
+                ) : (<></>)
+              }
+              <ModalFooter>
+                <span />
+                <Button disabled={email.length === 0} onClick={signup} isLoading={signupApi.isLoading}>確認メールを送信</Button>
+              </ModalFooter>
+            </>
+          )
+        }else{
+          return (
+            <>
+              <h2>確認メールを送信しました！</h2>
+              <p>受信ボックスを確認し、メールに記載されたURLから本登録を行って下さい</p>
+              <ModalFooter>
+                <span />
+                <Button onClick={onClose}>閉じる</Button>
+              </ModalFooter>
+            </>
+          )
+        }
+      })()}
     </Modal>
   )
 }

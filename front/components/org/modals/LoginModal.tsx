@@ -22,7 +22,8 @@ const LoginModal = ({
   const login = async () => {
     try{
       setIsLoading(true)
-      globalViewModel.login(id, password)
+      await globalViewModel.login(id, password)
+      onClose()
     }catch(e){
       if(e instanceof ApiError){
         setError(e)
@@ -30,8 +31,14 @@ const LoginModal = ({
     }
     setIsLoading(false)
   }
+  const onClose = () => {
+    setId('')
+    setPassword('')
+    setError(null)
+    props.onClose()
+  }
   return (
-    <Modal {...props} title='ログイン'>
+    <Modal {...props} onClose={onClose} title='ログイン'>
       <TextInput
         type='text'
         placeholder="ID または メールアドレス"

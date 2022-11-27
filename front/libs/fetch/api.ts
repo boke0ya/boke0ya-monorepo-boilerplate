@@ -5,7 +5,7 @@ const api = async <T, S>(method: 'POST' | 'PUT' | 'GET' | 'DELETE', url: string,
   const headers: { [key: string]: string } = {
     'Content-Type': 'application/json'
   }
-  const { BEATHUB_SESSION_ID: token } = parseCookies()
+  const { AUTH_TOKEN: token } = parseCookies()
   if(token){
     headers['Authorization'] = `Bearer ${token}`
   }

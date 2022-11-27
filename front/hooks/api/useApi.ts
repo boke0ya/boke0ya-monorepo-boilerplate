@@ -22,6 +22,7 @@ const useApi = <T, S>(method: 'POST' | 'GET' | 'PUT' | 'DELETE', url: string) =>
         isLoading: false,
         data: result
       })
+      return result
     }catch(e){
       if(e instanceof ApiError){
         setResult({
@@ -29,6 +30,7 @@ const useApi = <T, S>(method: 'POST' | 'GET' | 'PUT' | 'DELETE', url: string) =>
           error: e
         })
       }
+      throw e
     }
   }
   return {

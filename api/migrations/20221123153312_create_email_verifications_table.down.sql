@@ -1,1 +1,1 @@
-drop table email_verifications if exists;
+drop table if exists email_verifications;

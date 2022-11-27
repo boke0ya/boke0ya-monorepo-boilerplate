@@ -41,7 +41,7 @@ func main() {
 		userRepository,
 		emailVerificationRepository,
 		os.Getenv("BASE_URL"),
-		os.Getenv("BEATHUB_SECRET"),
+		os.Getenv("JWT_SECRET"),
 	)
 
 	userViewConverter := NewUserViewConverter()

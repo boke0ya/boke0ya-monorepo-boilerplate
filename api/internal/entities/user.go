@@ -13,11 +13,15 @@ import (
 )
 
 type UserRepository interface {
+	Begin() UserRepository
+	Commit() error
+	Rollback()
 	Create(User) (User, error)
 	Update(User) (User, error)
 	DeleteById(id string) error
 	FindById(id string) (User, error)
 	FindByEmail(email string) (User, error)
+	FindByScreenName(screenName string) (User, error)
 }
 
 type User struct {
@@ -48,7 +52,7 @@ func (un UserEmail) Validate() error {
 type UserPassword string
 
 func NewUserPassword(password string) UserPassword {
-	secret := os.Getenv("HAJIKKO_ONLINE_SECRET")
+	secret := os.Getenv("JWT_SECRET")
 	hashedPasswordBytes := sha256.Sum256([]byte(password + secret))
 	hashedPassword := hex.EncodeToString(hashedPasswordBytes[:])
 	return UserPassword(hashedPassword)
@@ -62,7 +66,7 @@ func (un UserPassword) Validate() error {
 	}
 }
 func (un UserPassword) Check(password string) bool {
-	secret := os.Getenv("HAJIKKO_ONLINE_SECRET")
+	secret := os.Getenv("JWT_SECRET")
 	hashedPasswordBytes := sha256.Sum256([]byte(password + secret))
 	hashedPassword := hex.EncodeToString(hashedPasswordBytes[:])
 	return hashedPassword == string(un)
@@ -140,7 +144,7 @@ func (u *User) Login(password string) (LoginUser, error) {
 	}
 	u.LastLoginedAt = time.Now()
 	return LoginUser{
-		User:           *u,
+		User: *u,
 	}, nil
 }
 
@@ -150,6 +154,6 @@ func (lu *LoginUser) GetAuthorizationToken() (string, error) {
 		ExpiresAt: time.Now().Add(time.Hour * 24 * 14).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, claims)
-	tokenString, _ := token.SignedString([]byte(os.Getenv("HAJIKKO_ONLINE_SECRET")))
+	tokenString, _ := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	return tokenString, nil
 }

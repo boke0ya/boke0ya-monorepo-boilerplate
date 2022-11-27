@@ -6,6 +6,12 @@
   border-radius: 4px;
   border: none;
   padding: 0 12px;
-  box-sizing: border-box;
   width: 100%;
+  border: 2px solid transparent;
+  background: $highlight-1;
+  transition: border 0.2s;
+  &:focus {
+    outline: none;
+    border: 2px solid $primary-1;
+  }
 }

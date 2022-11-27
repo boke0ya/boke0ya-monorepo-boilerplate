@@ -1,15 +1,25 @@
-$primary-1: #00000033;
+$dark-text-1: #ffffff;
+$dark-text-2: #eeeeee;
 
-$secondary-1: #00000033;
+$light-text-1: #333333;
+$light-text-2: #444444;
 
-$highlight-1: #ffffff33;
+$text-1: $dark-text-1;
+$text-2: $dark-text-2;
 
-$shadow-1: #00000033;
+$primary-1: #ffa7d3;
+$primary-text-1: $light-text-1;
+$primary-text-2: $light-text-2;
+
+$highlight-1: #ffffff11;
+$highlight-2: #ffffff33;
+$highlight-3: #ffffff55;
+
+$shadow-1: #00000011;
+$shadow-2: #00000033;
+$shadow-3: #00000055;
 
 $base-1: #191b1c;
 $base-2: #2E2F31;
-
-$text-1: #ffffff;
-$text-2: #eeeeee;
 
 $error-1: #e63737;

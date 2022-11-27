@@ -38,29 +38,45 @@ func NewUserUsecase(
 }
 
 func (uu userUsecase) Signup(emailToken string, password string, screenName string, name string) (User, error) {
-	emailVerification, err := uu.emailVerificationRepository.FindByToken(emailToken)
+	emailVerificationTx := uu.emailVerificationRepository.Begin()
+	userTx := uu.userRepository.Begin()
+	defer func() {
+		emailVerificationTx.Rollback()
+		userTx.Rollback()
+	}()
+	emailVerification, err := emailVerificationTx.FindByToken(emailToken)
 	if err != nil {
 		return User{}, err
 	}
-	user, err := NewUser(string(emailVerification.Email), password, screenName, name)
+	user, err := emailVerification.Signup(password, screenName, name)
 	if err != nil {
 		return user, err
 	}
-	user, err = uu.userRepository.Create(user)
-	uu.emailVerificationRepository.DeleteById(emailVerification.Id)
+	user, err = userTx.Create(user)
+	emailVerificationTx.DeleteById(emailVerification.Id)
+	emailVerificationTx.Commit()
+	userTx.Commit()
 	return user, err
 }
 
 func (uu userUsecase) SignupEmailVerification(email string) error {
+	emailVerificationTx := uu.emailVerificationRepository.Begin()
+	userTx := uu.userRepository.Begin()
+	defer func() {
+		emailVerificationTx.Rollback()
+		userTx.Rollback()
+	}()
 	emailVerification, err := NewEmailVerification(nil, email)
 	if err != nil {
 		return err
 	}
-	if _, err := uu.userRepository.FindByEmail(email); err == nil {
+	if _, err := userTx.FindByEmail(email); err == nil {
 		return errors.New(errors.EmailAlreadyExistsError, nil)
 	}
-	uu.emailVerificationRepository.Create(emailVerification)
-	return uu.mailAdapter.Send(
+	if _, err := emailVerificationTx.Create(emailVerification); err != nil {
+		return err
+	}
+	err = uu.mailAdapter.Send(
 		email,
 		"BeatHub 本人確認",
 		"BeatHubのご登録ありがとうございます。\r\n"+
@@ -71,25 +87,51 @@ func (uu userUsecase) SignupEmailVerification(email string) error {
 			"※このメールに心当たりが無い方は、メールを削除して頂いて構いません。\r\n"+
 			"ご迷惑をおかけし申し訳ありません。",
 	)
+	if err != nil {
+		return err
+	}
+	emailVerificationTx.Commit()
+	userTx.Commit()
+	return nil
 }
 
 func (uu userUsecase) UpdateEmail(loginUser LoginUser, emailToken string) (User, error) {
-	emailVerification, err := uu.emailVerificationRepository.FindByToken(emailToken)
+	emailVerificationTx := uu.emailVerificationRepository.Begin()
+	userTx := uu.userRepository.Begin()
+	defer func() {
+		emailVerificationTx.Rollback()
+		userTx.Rollback()
+	}()
+	emailVerification, err := emailVerificationTx.FindByToken(emailToken)
 	if err != nil {
-		return loginUser.User, err
+		return User{}, err
 	}
-	if err := loginUser.UpdateEmail(string(emailVerification.Email)); err != nil {
-		return loginUser.User, err
-	}
-	user, err := uu.userRepository.Update(loginUser.User)
+	user, err := userTx.FindById(loginUser.Id)
 	if err != nil {
 		return user, err
 	}
-	err = uu.emailVerificationRepository.DeleteById(emailVerification.Id)
+	if err := user.UpdateEmail(string(emailVerification.Email)); err != nil {
+		return user, err
+	}
+	user, err = userTx.Update(user)
+	if err != nil {
+		return user, err
+	}
+	if err := emailVerificationTx.DeleteById(emailVerification.Id); err != nil {
+		return user, err
+	}
+	emailVerificationTx.Commit()
+	userTx.Commit()
 	return user, err
 }
 
 func (uu userUsecase) UpdateEmailVerification(loginUser LoginUser, email string) error {
+	emailVerificationTx := uu.emailVerificationRepository.Begin()
+	userTx := uu.userRepository.Begin()
+	defer func() {
+		emailVerificationTx.Rollback()
+		userTx.Rollback()
+	}()
 	emailVerification, err := NewEmailVerification(&loginUser.User, email)
 	if err != nil {
 		return err
@@ -98,7 +140,7 @@ func (uu userUsecase) UpdateEmailVerification(loginUser LoginUser, email string)
 		return errors.New(errors.EmailAlreadyExistsError, nil)
 	}
 	uu.emailVerificationRepository.Create(emailVerification)
-	return uu.mailAdapter.Send(
+	err = uu.mailAdapter.Send(
 		email,
 		"BeatHub 本人確認",
 		"メールアドレスの変更を受け付けました。\r\n"+
@@ -109,20 +151,43 @@ func (uu userUsecase) UpdateEmailVerification(loginUser LoginUser, email string)
 			"※このメールに心当たりが無い方は、メールを削除して頂いて構いません。\r\n"+
 			"ご迷惑をおかけし申し訳ありません。",
 	)
+	if err != nil {
+		return err
+	}
+	userTx.Commit()
+	emailVerificationTx.Commit()
+	return nil
 }
 
 func (uu userUsecase) UpdatePassword(loginUser LoginUser, currentPassword string, password string) (User, error) {
-	if err := loginUser.UpdatePassword(currentPassword, password); err != nil {
-		return loginUser.User, err
+	tx := uu.userRepository.Begin()
+	defer tx.Rollback()
+	user, err := tx.FindById(loginUser.Id)
+	if err != nil {
+		return user, err
 	}
-	return uu.userRepository.Update(loginUser.User)
+	if err := user.UpdatePassword(currentPassword, password); err != nil {
+		return user, err
+	}
+	if _, err := tx.Update(user); err != nil {
+		return user, err
+	}
+	tx.Commit()
+	return user, nil
 }
 
 func (uu userUsecase) UpdateProfile(loginUser LoginUser, screenName string, name string) (User, error) {
-	if err := loginUser.UpdateProfile(screenName, name); err != nil {
-		return loginUser.User, err
+	tx := uu.userRepository.Begin()
+	defer tx.Rollback()
+	user, err := tx.FindById(loginUser.Id)
+	if err != nil {
+		return user, err
 	}
-	user, err := uu.userRepository.Update(loginUser.User)
+	if err := user.UpdateProfile(screenName, name); err != nil {
+		return user, err
+	}
+	user, err = tx.Update(loginUser.User)
+	tx.Commit()
 	return user, err
 }
 
@@ -132,14 +197,35 @@ func (uu userUsecase) CreateUpdateUserIconUrl(loginUser LoginUser) (string, erro
 }
 
 func (uu userUsecase) Withdraw(loginUser LoginUser, password string) error {
-	if _, err := loginUser.Login(password); err != nil {
+	tx := uu.userRepository.Begin()
+	user, err := tx.FindById(loginUser.Id)
+	if err != nil {
 		return err
 	}
-	return uu.userRepository.DeleteById(loginUser.Id)
+	if _, err := user.Login(password); err != nil {
+		return err
+	}
+	if err := tx.DeleteById(user.Id); err != nil {
+		return err
+	}
+	tx.Commit()
+	return nil
 }
 
-func (uu userUsecase) Login(email string, password string) (string, error) {
+func (uu userUsecase) LoginByEmail(email string, password string) (string, error) {
 	user, err := uu.userRepository.FindByEmail(email)
+	if err != nil {
+		return "", err
+	}
+	loginUser, err := user.Login(password)
+	if err != nil {
+		return "", err
+	}
+	return loginUser.GetAuthorizationToken()
+}
+
+func (uu userUsecase) LoginByScreenName(screenName string, password string) (string, error) {
+	user, err := uu.userRepository.FindByScreenName(screenName)
 	if err != nil {
 		return "", err
 	}

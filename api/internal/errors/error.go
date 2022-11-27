@@ -48,6 +48,7 @@ const (
 	InvalidScreenNameFormatError               = 10104
 	InvalidNameFormatError                     = 10105
 	EmailAlreadyExistsError                    = 20100
+	EmailVerificationNotForSignup              = 20101
 	UserNotFoundError                          = 40100
 	EmailVerificationNotFoundError             = 40102
 	AuthorizationRequired                      = 50100

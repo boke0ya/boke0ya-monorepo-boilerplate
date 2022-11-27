@@ -5,6 +5,7 @@ interface InputProps {
   placeholder?: string;
   className?: string;
   type?: 'text' | 'password' | 'email' | 'search';
+  pattern?: string;
   readonly?: boolean;
   disabled?: boolean;
   onChange?(e: React.ChangeEvent<HTMLInputElement>): void;

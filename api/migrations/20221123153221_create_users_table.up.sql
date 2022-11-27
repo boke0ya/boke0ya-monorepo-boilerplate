@@ -6,5 +6,6 @@ create table if not exists users (
     password varchar(255) not null,
     description text,
     created_at timestamp,
-    updated_at timestamp
+    updated_at timestamp,
+    last_logined_at timestamp
 );

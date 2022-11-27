@@ -17,7 +17,8 @@ type UserUsecase interface {
 	UpdateEmailVerification(loginUser LoginUser, email string) error
 	UpdatePassword(loginUser LoginUser, currentPassword string, password string) (User, error)
 	Withdraw(loginUser LoginUser, password string) error
-	Login(email string, password string) (string, error)
+	LoginByEmail(email string, password string) (string, error)
+	LoginByScreenName(screenName string, password string) (string, error)
 	Session(token string) (LoginUser, error)
 }
 
@@ -169,8 +170,9 @@ func (uc UsersController) Withdraw(c *gin.Context) {
 }
 
 type LoginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email      string `json:"email"`
+	ScreenName string `json:"screenName"`
+	Password   string `json:"password"`
 }
 
 type LoginResponse struct {
@@ -184,8 +186,17 @@ func (uc UsersController) Login(c *gin.Context) {
 		return
 	}
 	email := req.Email
+	screenName := req.ScreenName
 	password := req.Password
-	token, err := uc.userUsecase.Login(email, password)
+	var (
+		token string
+		err error
+	)
+	if email != "" {
+		token, err = uc.userUsecase.LoginByEmail(email, password)
+	}else{
+		token, err = uc.userUsecase.LoginByScreenName(screenName, password)
+	}
 	if err != nil {
 		c.Error(err).SetType(gin.ErrorTypePublic)
 		return

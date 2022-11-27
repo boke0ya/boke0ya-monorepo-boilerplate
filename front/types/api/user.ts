@@ -20,3 +20,18 @@ export interface LoginResponse {
 export interface SignupEmailVerificationRequest {
   email: string;
 }
+
+export interface SignupRequest {
+  token: string;
+  name: string;
+  screenName: string;
+  password: string;
+}
+
+export interface SignupResponse extends User {
+  token: string;
+}
+
+export interface CreatePutUserIconUrlResponse {
+  url: string;
+}
