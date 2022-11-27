@@ -1,4 +1,4 @@
-# BeatHub
+# Boke0ya monorepo boilerplate
 
 ## Requirements
 - Docker + docker-compose
