@@ -1,7 +1,7 @@
 import { parseCookies } from "nookies"
 import { ApiError } from "../../types/errors"
 
-const api = async <T, S>(method: 'POST' | 'PUT' | 'GET' | 'DELETE', url: string, data: T | {} = {}): Promise<S> => {
+const api = async <T, S>(method: 'POST' | 'PUT' | 'GET' | 'DELETE', url: string, data: T = null): Promise<S> => {
   const headers: { [key: string]: string } = {
     'Content-Type': 'application/json'
   }
@@ -12,7 +12,7 @@ const api = async <T, S>(method: 'POST' | 'PUT' | 'GET' | 'DELETE', url: string,
   return await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${url}`, {
     method,
     headers,
-    body: JSON.stringify(data)
+    body: data ? JSON.stringify(data) : null,
   }).then(async res => {
     if(!res.ok){
       throw new ApiError(await res.json())
