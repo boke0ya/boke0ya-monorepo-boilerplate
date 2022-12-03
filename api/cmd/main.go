@@ -44,7 +44,7 @@ func main() {
 		os.Getenv("JWT_SECRET"),
 	)
 
-	userViewConverter := NewUserViewConverter()
+	userViewConverter := NewUserViewConverter(userIconBucketAdapter)
 
 	usersController := NewUsersController(userUsecase, userViewConverter)
 
