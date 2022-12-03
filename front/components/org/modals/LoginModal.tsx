@@ -1,5 +1,5 @@
-import { ComponentProps, useState } from "react";
-import useGlobalViewModel from "../../../hooks/viewmodels/useGlobalViewModel";
+import { useContext, useState } from "react";
+import { GlobalContext } from "../../../hooks/viewmodels/useGlobalViewModel";
 import { ApiError } from "../../../types/errors";
 import Button from "../../atm/Button";
 import ErrorMessage from "../../atm/ErrorMessage";
@@ -15,7 +15,7 @@ interface LoginModalProps {
 const LoginModal = ({
   ...props
 }: LoginModalProps) => {
-  const globalViewModel = useGlobalViewModel()
+  const globalViewModel = useContext(GlobalContext)
   const [error, setError] = useState<ApiError>(null)
   const [id, setId] = useState<string>('')
   const [password, setPassword] = useState<string>('')
@@ -60,7 +60,10 @@ const LoginModal = ({
         ) : (<></>)
       }
       <FormFooter>
-        <span />
+        <Button isLoading={isLoading} onClick={() => {
+          globalViewModel.closeLoginModal()
+          globalViewModel.openLoginModal()
+        }}>新規登録</Button>
         <Button isLoading={isLoading} onClick={login}>ログイン</Button>
       </FormFooter>
     </Modal>
