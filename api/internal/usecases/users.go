@@ -186,7 +186,7 @@ func (uu userUsecase) UpdateProfile(loginUser LoginUser, screenName string, name
 	if err := user.UpdateProfile(screenName, name); err != nil {
 		return user, err
 	}
-	user, err = tx.Update(loginUser.User)
+	user, err = tx.Update(user)
 	tx.Commit()
 	return user, err
 }
