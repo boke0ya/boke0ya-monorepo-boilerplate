@@ -1,5 +1,5 @@
 import { destroyCookie, setCookie } from "nookies";
-import { createContext, useReducer } from "react";
+import { createContext, useReducer, useState } from "react";
 import getApi from "../../libs/fetch/get";
 import postApi from "../../libs/fetch/post";
 import { LoginRequest, LoginResponse, User } from "../../types/api/user";
@@ -41,6 +41,12 @@ const useGlobalViewModel = () => {
   const [state, dispatch] = useReducer(GlobalReducer, {
     sessionUser: null,
   })
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const openLoginModal = () => setIsLoginOpen(true);
+  const closeLoginModal = () => setIsLoginOpen(false);
+  const openSignupModal = () => setIsSignupOpen(true);
+  const closeSignupModal = () => setIsSignupOpen(false);
   const login = async (id: string, password: string) => {
     let email: string
     let screenName: string
@@ -76,6 +82,12 @@ const useGlobalViewModel = () => {
   }
   return {
     ...state,
+    isLoginOpen,
+    openLoginModal,
+    closeLoginModal,
+    isSignupOpen,
+    openSignupModal,
+    closeSignupModal,
     login,
     logout,
     loadSessionUser,

@@ -62,7 +62,7 @@ const LoginModal = ({
       <FormFooter>
         <Button isLoading={isLoading} onClick={() => {
           globalViewModel.closeLoginModal()
-          globalViewModel.openLoginModal()
+          globalViewModel.openSignupModal()
         }}>新規登録</Button>
         <Button isLoading={isLoading} onClick={login}>ログイン</Button>
       </FormFooter>
