@@ -8,8 +8,7 @@ export interface User {
 }
 
 export interface LoginRequest {
-  email?: string;
-  screenName?: string;
+  id: string;
   password: string;
 }
 
@@ -32,6 +31,22 @@ export interface SignupResponse extends User {
   token: string;
 }
 
-export interface CreatePutUserIconUrlResponse {
-  url: string;
+export interface UpdateEmailRequest {
+  email: string;
 }
+
+export interface UpdateEmailResponse {}
+
+export interface UpdatePasswordRequest {
+  currentPassword: string;
+  password: string;
+}
+
+export interface UpdatePasswordResponse {}
+
+export interface UpdateProfileRequest {
+  name: string;
+  screenName: string;
+}
+
+export interface UpdateProfileResponse extends User {}
