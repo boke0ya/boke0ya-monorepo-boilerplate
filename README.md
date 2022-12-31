@@ -1,4 +1,4 @@
-# Boke0ya monorepo boilerplate
+# Task Marathon
 
 ## Requirements
 - Docker + docker-compose
