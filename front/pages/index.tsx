@@ -1,14 +1,12 @@
 import Head from 'next/head'
-import { useState } from 'react'
+import { useContext } from 'react'
 import Button from '../components/atm/Button'
 import LoginModal from '../components/org/modals/LoginModal'
-import Modal from '../components/org/modals/Modal'
 import SignupModal from '../components/org/modals/SignupModal'
-import styles from '../styles/Home.module.scss'
+import { GlobalContext } from '../hooks/viewmodels/useGlobalViewModel'
 
 export default function Home() {
-  const [isLoginOpen, setIsLoginOpen] = useState(false)
-  const [isSignupOpen, setIsSignupOpen] = useState(false)
+  const globalViewModel = useContext(GlobalContext)
   return (
     <>
       <Head>
@@ -20,11 +18,11 @@ export default function Home() {
         display: 'flex',
         gap: '8px'
         }}>
-        <Button onClick={() => setIsLoginOpen(true)}>ログイン</Button>
-        <Button onClick={() => setIsSignupOpen(true)}>新規登録</Button>
+        <Button onClick={() => globalViewModel.openLoginModal()}>ログイン</Button>
+        <Button onClick={() => globalViewModel.openSignupModal()}>新規登録</Button>
       </div>
-      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-      <SignupModal isOpen={isSignupOpen} onClose={() => setIsSignupOpen(false)} />
+      <LoginModal isOpen={globalViewModel.isLoginOpen} onClose={() => globalViewModel.closeLoginModal()} />
+      <SignupModal isOpen={globalViewModel.isSignupOpen} onClose={() => globalViewModel.closeSignupModel()} />
     </>
   )
 }
